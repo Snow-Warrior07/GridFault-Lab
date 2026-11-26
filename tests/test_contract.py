@@ -48,3 +48,13 @@ def test_unsynchronized_phasor_request_is_rejected():
     r=record();r['synchronized']=False
     with pytest.raises(InputError,match='unsynchronized'):choose_profile(r,'phasor_double')
 
+
+def test_null_measurement_objects_are_rejected():
+    r=record();r['rms']=None
+    with pytest.raises(InputError,match='objects'):validate_record(r)
+
+
+def test_overflowing_numeric_input_is_a_readable_error():
+    r=record();r['phasors']['s_va']['re']=10**400
+    with pytest.raises(InputError,match='Non-numeric'):validate_record(r)
+

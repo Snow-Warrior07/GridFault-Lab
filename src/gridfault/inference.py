@@ -37,7 +37,7 @@ def validate_record(record: dict) -> tuple[dict,dict,list[str]]:
             if any(isinstance(value[t],bool) or not isinstance(value[t],(int,float)) for t in ["re","im"]):
                 raise ValueError
             z=complex(float(value["re"]),float(value["im"]))
-        except (TypeError,ValueError):
+        except (TypeError,ValueError,OverflowError):
             raise InputError(f"Non-numeric phasor {k}") from None
         if not np.isfinite([z.real,z.imag]).all():
             raise InputError(f"Non-finite phasor {k}")
@@ -48,7 +48,7 @@ def validate_record(record: dict) -> tuple[dict,dict,list[str]]:
         try:
             if isinstance(value,bool) or not isinstance(value,(int,float)):raise ValueError
             v=float(value)
-        except (TypeError,ValueError):
+        except (TypeError,ValueError,OverflowError):
             raise InputError(f"Non-numeric RMS {k}") from None
         if not np.isfinite(v) or v<0:
             raise InputError(f"{k} must be a finite non-negative RMS magnitude")

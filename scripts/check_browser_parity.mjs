@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-import {predict,profileDefinitions,parseCSV} from '../site/inference.mjs';
+import {predict,profileDefinitions,parseCSV,validate} from '../site/inference.mjs';
 
 const fixtures=JSON.parse(fs.readFileSync(new URL('../tests/fixtures/parity.json',import.meta.url),'utf8'));
 const profiles=profileDefinitions(),cache={};
@@ -19,5 +19,6 @@ for(const f of fixtures){
 assert.throws(()=>parseCSV('s_va,s_va\n1,2'),/duplicate/);
 assert.throws(()=>parseCSV('s_va\n=1+1'),/Non-numeric/);
 assert.throws(()=>parseCSV('s_va_re\n1'),/Both real/);
+assert.throws(()=>validate({...fixtures[0].record,rms:null},profiles),/objects/);
 console.log(`PASS: ${checked} Python/browser prediction fixtures; strict CSV rejection checks.`);
 

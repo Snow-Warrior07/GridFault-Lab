@@ -33,7 +33,7 @@ export function validate(record,profiles){
   const required={schema_version:1,benchmark_id:'ieee9-adapted-7-8-v1',line_id:'L7-8',bus_s:7,bus_r:8,base_kv:345,base_mva:100,frequency_hz:50,line_length_km:120,units:'per_unit_rms'};
   for(const [k,v] of Object.entries(required))if(record[k]!==v)throw Error(`Unsupported or missing ${k}; this model requires ${v}`);
   if(typeof record.synchronized!=='boolean')throw Error('synchronized must explicitly be true or false');
-  const supplied=record.phasors??{},given=record.rms??{},phasors={},rms={};
+  const supplied=record.phasors===undefined?{}:record.phasors,given=record.rms===undefined?{}:record.rms,phasors={},rms={};
   if(typeof supplied!=='object'||supplied===null||Array.isArray(supplied)||typeof given!=='object'||given===null||Array.isArray(given))throw Error('rms and phasors must be objects');
   for(const [k,z] of Object.entries(supplied)){
     if(!CHANNELS.includes(k))throw Error(`Unknown measurement channel: ${k}`);
