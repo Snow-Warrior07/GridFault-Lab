@@ -1,4 +1,4 @@
-import {CHANNELS,S,R,extract,parseCSV,predict,profileDefinitions,validate} from './inference.mjs';
+import {CHANNELS,S,R,extract,parseCSV,predict,profileDefinitions,validate} from './inference.mjs?v=0.1.0-1';
 const $=s=>document.querySelector(s),profiles=profileDefinitions();
 const labels={rms_single:'Bus 7 · RMS',rms_receiving:'Bus 8 · RMS',rms_double:'Both buses · RMS',phasor_double:'Both buses · phasors'};
 const eventLabels={internal:'Internal line fault',external:'External disturbance',healthy:'Healthy operation'};
