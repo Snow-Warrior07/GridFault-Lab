@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s),profiles=profileDefinitions();
 const labels={rms_single:'Bus 7 · RMS',rms_receiving:'Bus 8 · RMS',rms_double:'Both buses · RMS',phasor_double:'Both buses · phasors'};
 const eventLabels={internal:'Internal line fault',external:'External disturbance',healthy:'Healthy operation'};
 const names={AG:'A–ground fault',BG:'B–ground fault',CG:'C–ground fault',AB:'A–B fault',BC:'B–C fault',CA:'C–A fault',ABG:'A–B–ground fault',BCG:'B–C–ground fault',CAG:'C–A–ground fault',ABC:'Three-phase fault'};
-let examples=[],evaluation=null,sequence=0,currentResult=null;
+let examples=[],evaluation=null,sequence=0,currentResult=null,currentReference=null;
 const bundles={};
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const percent=(v,d=1)=>v==null?'—':`${(v*100).toFixed(d)}%`;
@@ -14,7 +14,8 @@ function initTable(){
   $('#measurement-rows').innerHTML=['Va','Vb','Vc','Ia','Ib','Ic'].map((name,i)=>`<tr><td>${name.slice(0,1)}<sub>${name.slice(1)}</sub><span class="unit-label">${i<3?'V':'I'}</span></td>${[S[i],R[i]].map(k=>`<td><input type="number" step="any" min="0" id="${k}-mag" aria-label="${k} RMS per unit" placeholder="—"></td><td class="angle-col"><input class="angle-input" type="number" step="any" id="${k}-angle" aria-label="${k} phase degrees" placeholder="—"></td>`).join('')}</tr>`).join('');
 }
 
-function setRecord(record){
+function setRecord(record,reference=null){
+  currentReference=reference;
   const hasPhase=Object.keys(record.phasors??{}).length>0;
   $('#representation').value=hasPhase?'phasor':'rms';
   const included=[...Object.keys(record.phasors??{}),...Object.keys(record.rms??{})];
@@ -23,8 +24,8 @@ function setRecord(record){
   $('#synchronized').checked=record.synchronized===true;
   for(const k of CHANNELS){
     const z=record.phasors?.[k];
-    $(`#${k}-mag`).value=z?Math.hypot(z.re,z.im).toPrecision(12):record.rms?.[k]??'';
-    $(`#${k}-angle`).value=z?(Math.atan2(z.im,z.re)*180/Math.PI).toPrecision(12):'';
+    $(`#${k}-mag`).value=z?Math.hypot(z.re,z.im).toPrecision(6):record.rms?.[k]??'';
+    $(`#${k}-angle`).value=z?(Math.atan2(z.im,z.re)*180/Math.PI).toFixed(3):'';
   }
   updateAvailability();
 }
@@ -54,6 +55,7 @@ function updateAvailability(){
     $(`#${k}-mag`).disabled=disabled;$(`#${k}-angle`).disabled=disabled;
   }
   document.querySelectorAll('.angle-col').forEach(e=>e.hidden=!phase);
+  $('#sending-heading').colSpan=phase?2:1;$('#receiving-heading').colSpan=phase?2:1;
   $('#synchronized').disabled=!phase||terminal!=='both';
   $('#input-error').hidden=true;
   try{
@@ -137,6 +139,12 @@ function renderResult(r,tasks,elapsed){
   }
   if(tasks.includes('event')&&r.event_probabilities)html+=`<div class="probability-title"><span>EVENT MODEL SCORE</span><span>${percent(Math.max(...Object.values(r.event_probabilities)),1)}</span></div>`;
   html+=r.messages.map(m=>`<p class="result-message">${esc(m)}</p>`).join('');
+  if(currentReference){
+    const t=currentReference;
+    const referenceText=`True event: ${eventLabels[t.event]}. ${t.fault_type?'True type: '+t.fault_type+'. ':''}${t.location_km==null?'No monitored-line fault position.':'True distance: '+num(t.location_km,2)+' km from bus 7.'}`;
+    const error=t.location_km!=null&&r.location_km!=null?`Absolute error for this example: ${num(Math.abs(t.location_km-r.location_km),2)} km.`:'';
+    html+=`<details class="advanced reference"><summary>Show simulation reference</summary><p class="small muted">${esc(referenceText)} ${esc(error)} The reference is used only for this comparison; it is not a prediction input.</p></details>`;
+  }
   html+=`<div class="result-meta"><span>${esc(labels[r.profile])} · ${r.family==='anfis'?'100-rule ANFIS':'Random Forest'}</span><span>${elapsed.toFixed(1)} ms inference*</span></div><p class="privacy-note">*Excludes measurement acquisition and model download. Synthetic benchmark.</p>`;
   $('#result-body').innerHTML=html;
 }
@@ -181,10 +189,10 @@ function renderMethod(e){
 async function init(){
   initTable();navigate();window.addEventListener('hashchange',navigate);
   for(const id of ['representation','terminal','synchronized','profile','family'])$(`#${id}`).addEventListener('change',invalidate);
-  $('#measurement-rows').addEventListener('input',invalidate);
+  $('#measurement-rows').addEventListener('input',()=>{currentReference=null;$('#example-select').value='';invalidate();});
   document.querySelectorAll('[name="task"]').forEach(e=>e.addEventListener('change',invalidate));
   $('#analyze').addEventListener('click',analyze);
-  $('#example-select').addEventListener('change',()=>{const e=examples[Number($('#example-select').value)];if(e){setRecord(e.record);invalidate();}});
+  $('#example-select').addEventListener('change',()=>{const e=examples[Number($('#example-select').value)];if(e){setRecord(e.record,e.truth);invalidate();}});
   $('#download-input').addEventListener('click',()=>{try{download('gridfault-input.json',JSON.stringify(getRecord(),null,2));}catch(e){alert(e.message);}});
   $('#download-csv').addEventListener('click',()=>{
     const r=getRecord(),keys=['synchronized'],values=[String(r.synchronized)];
@@ -204,7 +212,7 @@ async function init(){
     [examples,evaluation]=await Promise.all(responses.map(r=>r.json()));
     $('#example-select').innerHTML=examples.map((e,i)=>`<option value="${i}">${esc(e.truth.event==='internal'?names[e.truth.fault_type]:eventLabels[e.truth.event])}</option>`).join('');
     const initial=Math.max(0,examples.findIndex(e=>e.truth.fault_type==='AG'));$('#example-select').value=String(initial);
-    setRecord(examples[initial].record);renderEvaluation(evaluation);renderMethod(evaluation);await analyze();
+    setRecord(examples[initial].record,examples[initial].truth);renderEvaluation(evaluation);renderMethod(evaluation);await analyze();
   }catch(e){$('#input-error').textContent=e.message;$('#input-error').hidden=false;$('#analyze').disabled=true;}
 }
 init();

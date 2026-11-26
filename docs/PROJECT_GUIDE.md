@@ -153,7 +153,7 @@ Measurement files stay in the browser; there is no external prediction API. Pyth
 
 ## What to demonstrate to the instructor
 
-Open an AG example with synchronized phasors and inspect its diagnosis, physical position and interval. Switch to RMS-only inputs and observe that a different trained model and wider error band are used. Remove the receiving end and repeat. Load a healthy and an external case to see that an in-line location is not applicable. Break an input contract to show an actionable refusal. Open Evaluation to compare actual errors and availability, then use the data/model cards to discuss exactly what has and has not been validated.
+Open an AG example with synchronized phasors and inspect its diagnosis, physical position and interval. Expand "Show simulation reference" to compare the known simulated label/distance and absolute error. That reference is never passed to the predictor; editing a numeric measurement clears the reference. Switch to RMS-only inputs and observe that a different trained model and wider error band are used. Remove the receiving end and repeat. Load a healthy and an external case to see that an in-line location is not applicable. Break an input contract to show an actionable refusal. Open Evaluation to compare actual errors and availability, then use the data/model cards to discuss exactly what has and has not been validated.
 
 The next substantial research step is independent Simulink/EMT or measured relay data, including sensor/transformer errors and causal fault windows. Further work can compare DWT/LSTM features, broaden line/topology coverage, identify supported physical parameters, and study simulated control actions. This release establishes a functioning, inspectable baseline for those experiments.
 

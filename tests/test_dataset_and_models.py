@@ -1,6 +1,7 @@
 import gzip
 import csv
 import json
+import hashlib
 from pathlib import Path
 import numpy as np
 import pytest
@@ -36,6 +37,12 @@ def test_no_fault_position_for_non_internal_events(rows):
 def test_no_target_or_simulator_settings_enter_features():
     forbidden={'event','fault_type','location_pu','actual_fault_type','resistance_ohm','snr_db','group_id','scenario_id','split'}
     for features in PROFILES.values():assert not forbidden.intersection(features)
+
+
+def test_dataset_matches_recorded_checksum_and_counts(rows):
+    manifest=json.loads((ROOT/'data/manifest.json').read_text())
+    assert len(rows)==manifest['records']
+    assert hashlib.sha256((ROOT/'data/dataset.csv.gz').read_bytes()).hexdigest()==manifest['sha256']
 
 
 def test_exported_models_preserve_public_schema_and_finite_parameters():
