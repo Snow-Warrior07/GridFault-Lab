@@ -1,0 +1,1364 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-11-26T09:00:13.167709+00:00",
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1"
+  },
+  "dataset": {
+    "seed": 20261126,
+    "groups": 800,
+    "records": 20800,
+    "physical_scenarios": 10400,
+    "partition_groups": {
+      "train": 480,
+      "validation": 120,
+      "calibration": 80,
+      "test": 120
+    },
+    "partition_records": {
+      "train": 12480,
+      "validation": 3120,
+      "calibration": 2080,
+      "test": 3120
+    },
+    "event_counts": {
+      "healthy": 1600,
+      "internal": 16000,
+      "external": 3200
+    },
+    "fault_types": [
+      "AG",
+      "BG",
+      "CG",
+      "AB",
+      "BC",
+      "CA",
+      "ABG",
+      "BCG",
+      "CAG",
+      "ABC"
+    ],
+    "variants": [
+      "clean",
+      "20/30/40/50 dB complex-phasor noise"
+    ],
+    "sha256": "080f6f152c1cd1b4fc2d8bf36507d56f831211850a7e38c1867f16b1322e1962",
+    "benchmark": {
+      "id": "ieee9-adapted-7-8-v1",
+      "line_id": "L7-8",
+      "bus_s": 7,
+      "bus_r": 8,
+      "line_length_km": 120.0,
+      "base_mva": 100.0,
+      "base_kv": 345.0,
+      "frequency_hz": 50,
+      "z_base_ohm": 1190.25,
+      "nominal_z_re": [
+        [
+          0.014166666666666678,
+          0.0056666666666666515,
+          0.005666666666666669
+        ],
+        [
+          0.005666666666666675,
+          0.014166666666666645,
+          0.005666666666666676
+        ],
+        [
+          0.005666666666666674,
+          0.0056666666666666385,
+          0.01416666666666667
+        ]
+      ],
+      "nominal_z_im": [
+        [
+          0.12,
+          0.04799999999999999,
+          0.04799999999999999
+        ],
+        [
+          0.04800000000000001,
+          0.11999999999999997,
+          0.04799999999999998
+        ],
+        [
+          0.04800000000000001,
+          0.04799999999999999,
+          0.11999999999999997
+        ]
+      ],
+      "source": "https://github.com/MATPOWER/matpower/blob/master/data/case9.m",
+      "assumptions": [
+        "Linear, fundamental-frequency, three-phase nodal circuit; not EMT or field data.",
+        "Loads are constant admittances; generators are grounded Norton equivalents.",
+        "Negative-sequence impedance equals positive; zero-sequence impedance is assumed 3x positive.",
+        "The monitored line is a series-only model; its case9 charging is intentionally omitted.",
+        "Other branches use pi shunts; no detailed transformer winding/grounding model.",
+        "120 km is an assumed length; it does not follow from MATPOWER data.",
+        "Only the registered 7-8 circuit, bases, and stated operating ranges are supported."
+      ]
+    },
+    "held_out_distance_bands_pu": [
+      [
+        0.2,
+        0.25
+      ],
+      [
+        0.7,
+        0.75
+      ]
+    ],
+    "splitting": "Operating-condition groups assigned before events, windows, or noisy copies are generated.",
+    "features": [
+      "s_va",
+      "s_vb",
+      "s_vc",
+      "s_ia",
+      "s_ib",
+      "s_ic",
+      "r_va",
+      "r_vb",
+      "r_vc",
+      "r_ia",
+      "r_ib",
+      "r_ic",
+      "s_va_re",
+      "s_va_im",
+      "s_vb_re",
+      "s_vb_im",
+      "s_vc_re",
+      "s_vc_im",
+      "s_ia_re",
+      "s_ia_im",
+      "s_ib_re",
+      "s_ib_im",
+      "s_ic_re",
+      "s_ic_im",
+      "r_va_re",
+      "r_va_im",
+      "r_vb_re",
+      "r_vb_im",
+      "r_vc_re",
+      "r_vc_im",
+      "r_ia_re",
+      "r_ia_im",
+      "r_ib_re",
+      "r_ib_im",
+      "r_ic_re",
+      "r_ic_im",
+      "sv_seq0",
+      "sv_seq1",
+      "sv_seq2",
+      "si_seq0",
+      "si_seq1",
+      "si_seq2",
+      "rv_seq0",
+      "rv_seq1",
+      "rv_seq2",
+      "ri_seq0",
+      "ri_seq1",
+      "ri_seq2",
+      "diff_a",
+      "diff_b",
+      "diff_c",
+      "diff_ratio"
+    ],
+    "not_features": [
+      "event",
+      "fault_type",
+      "actual_fault_type",
+      "location_pu",
+      "resistance_ohm",
+      "snr_db",
+      "conditions",
+      "scenario_id"
+    ]
+  },
+  "profiles": {
+    "rms_single": {
+      "forest": {
+        "event": {
+          "n": 3120,
+          "accuracy": 0.9980769230769231,
+          "macro_f1": 0.9962400706992592,
+          "recall": {
+            "external": 0.9916666666666667,
+            "healthy": 0.9916666666666667,
+            "internal": 1.0
+          },
+          "confusion_matrix": [
+            [
+              476,
+              0,
+              4
+            ],
+            [
+              2,
+              238,
+              0
+            ],
+            [
+              0,
+              0,
+              2400
+            ]
+          ],
+          "classes": [
+            "external",
+            "healthy",
+            "internal"
+          ],
+          "expected_calibration_error_10_bins": 0.002147297133526424
+        },
+        "fault_type_oracle_internal": {
+          "n": 2400,
+          "accuracy": 0.9991666666666666,
+          "macro_f1": 0.9991666630497529,
+          "recall": {
+            "AB": 1.0,
+            "ABC": 1.0,
+            "ABG": 0.9958333333333333,
+            "AG": 1.0,
+            "BC": 1.0,
+            "BCG": 0.9958333333333333,
+            "BG": 1.0,
+            "CA": 1.0,
+            "CAG": 1.0,
+            "CG": 1.0
+          },
+          "confusion_matrix": [
+            [
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              239,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              239,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240
+            ]
+          ],
+          "classes": [
+            "AB",
+            "ABC",
+            "ABG",
+            "AG",
+            "BC",
+            "BCG",
+            "BG",
+            "CA",
+            "CAG",
+            "CG"
+          ],
+          "expected_calibration_error_10_bins": 0.0008234893238650514
+        },
+        "pipeline": {
+          "total_records": 3120,
+          "event_acceptance_rate": 0.9993589743589744,
+          "correct_event_among_accepted": 0.9983964079538166,
+          "internal_event_recall_including_abstentions": 0.9995833333333334,
+          "healthy_false_internal_rate": 0.0,
+          "correct_fault_type_fraction_all_internal": 0.99875,
+          "location_availability_on_internal": 0.9995833333333334,
+          "false_in_line_location_count": 4,
+          "non_internal_records": 720,
+          "abstention_or_domain_rejection_count": 2,
+          "interval_target_coverage": 0.9,
+          "interval_empirical_test_coverage": 0.9224676948728637
+        },
+        "location_accepted_internal": {
+          "n": 2399,
+          "mae_km": 9.14092905888887,
+          "rmse_km": 13.075812837079425,
+          "p95_absolute_error_km": 28.909463400728143,
+          "mean_error_percent_line": 7.617440882407392
+        },
+        "noise_location": {
+          "clean": {
+            "n": 1199,
+            "mae_km": 8.3711929447982
+          },
+          "40.0": {
+            "n": 290,
+            "mae_km": 8.648185796174158
+          },
+          "50.0": {
+            "n": 302,
+            "mae_km": 9.225087087732796
+          },
+          "30.0": {
+            "n": 308,
+            "mae_km": 9.055145225716418
+          },
+          "20.0": {
+            "n": 300,
+            "mae_km": 12.696978535182962
+          }
+        }
+      },
+      "anfis": {
+        "event": {
+          "n": 3120,
+          "accuracy": 0.9993589743589744,
+          "macro_f1": 0.9985402313516124,
+          "recall": {
+            "external": 0.9979166666666667,
+            "healthy": 0.9958333333333333,
+            "internal": 1.0
+          },
+          "confusion_matrix": [
+            [
+              479,
+              0,
+              1
+            ],
+            [
+              1,
+              239,
+              0
+            ],
+            [
+              0,
+              0,
+              2400
+            ]
+          ],
+          "classes": [
+            "external",
+            "healthy",
+            "internal"
+          ],
+          "expected_calibration_error_10_bins": 0.03576320194404054
+        },
+        "fault_type_oracle_internal": {
+          "n": 2400,
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "recall": {
+            "AB": 1.0,
+            "ABC": 1.0,
+            "ABG": 1.0,
+            "AG": 1.0,
+            "BC": 1.0,
+            "BCG": 1.0,
+            "BG": 1.0,
+            "CA": 1.0,
+            "CAG": 1.0,
+            "CG": 1.0
+          },
+          "confusion_matrix": [
+            [
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240
+            ]
+          ],
+          "classes": [
+            "AB",
+            "ABC",
+            "ABG",
+            "AG",
+            "BC",
+            "BCG",
+            "BG",
+            "CA",
+            "CAG",
+            "CG"
+          ],
+          "expected_calibration_error_10_bins": 0.14278508477569374
+        },
+        "pipeline": {
+          "total_records": 3120,
+          "event_acceptance_rate": 0.9996794871794872,
+          "correct_event_among_accepted": 0.9996793844180827,
+          "internal_event_recall_including_abstentions": 1.0,
+          "healthy_false_internal_rate": 0.0,
+          "correct_fault_type_fraction_all_internal": 0.99875,
+          "location_availability_on_internal": 0.9966666666666667,
+          "false_in_line_location_count": 0,
+          "non_internal_records": 720,
+          "abstention_or_domain_rejection_count": 1,
+          "interval_target_coverage": 0.9,
+          "interval_empirical_test_coverage": 0.9101170568561873
+        },
+        "location_accepted_internal": {
+          "n": 2392,
+          "mae_km": 7.806836814311455,
+          "rmse_km": 11.01804558912769,
+          "p95_absolute_error_km": 23.49033636652452,
+          "mean_error_percent_line": 6.505697345259547
+        },
+        "noise_location": {
+          "clean": {
+            "n": 1200,
+            "mae_km": 6.654841042852674
+          },
+          "40.0": {
+            "n": 290,
+            "mae_km": 6.913676276773789
+          },
+          "50.0": {
+            "n": 302,
+            "mae_km": 7.341788590390262
+          },
+          "30.0": {
+            "n": 308,
+            "mae_km": 7.750672655230981
+          },
+          "20.0": {
+            "n": 292,
+            "mae_km": 13.96832519190546
+          }
+        }
+      }
+    },
+    "rms_receiving": {
+      "forest": {
+        "event": {
+          "n": 3120,
+          "accuracy": 0.9733974358974359,
+          "macro_f1": 0.9647174081230402,
+          "recall": {
+            "external": 0.9583333333333334,
+            "healthy": 0.9875,
+            "internal": 0.975
+          },
+          "confusion_matrix": [
+            [
+              460,
+              0,
+              20
+            ],
+            [
+              3,
+              237,
+              0
+            ],
+            [
+              60,
+              0,
+              2340
+            ]
+          ],
+          "classes": [
+            "external",
+            "healthy",
+            "internal"
+          ],
+          "expected_calibration_error_10_bins": 0.007303084952304772
+        },
+        "fault_type_oracle_internal": {
+          "n": 2400,
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "recall": {
+            "AB": 1.0,
+            "ABC": 1.0,
+            "ABG": 1.0,
+            "AG": 1.0,
+            "BC": 1.0,
+            "BCG": 1.0,
+            "BG": 1.0,
+            "CA": 1.0,
+            "CAG": 1.0,
+            "CG": 1.0
+          },
+          "confusion_matrix": [
+            [
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240
+            ]
+          ],
+          "classes": [
+            "AB",
+            "ABC",
+            "ABG",
+            "AG",
+            "BC",
+            "BCG",
+            "BG",
+            "CA",
+            "CAG",
+            "CG"
+          ],
+          "expected_calibration_error_10_bins": 0.0006758945274826263
+        },
+        "pipeline": {
+          "total_records": 3120,
+          "event_acceptance_rate": 0.9794871794871794,
+          "correct_event_among_accepted": 0.9826570680628273,
+          "internal_event_recall_including_abstentions": 0.965,
+          "healthy_false_internal_rate": 0.0,
+          "correct_fault_type_fraction_all_internal": 0.965,
+          "location_availability_on_internal": 0.965,
+          "false_in_line_location_count": 13,
+          "non_internal_records": 720,
+          "abstention_or_domain_rejection_count": 64,
+          "interval_target_coverage": 0.9,
+          "interval_empirical_test_coverage": 0.8877374784110535
+        },
+        "location_accepted_internal": {
+          "n": 2316,
+          "mae_km": 14.343679711285978,
+          "rmse_km": 18.79934213601906,
+          "p95_absolute_error_km": 42.70139007040708,
+          "mean_error_percent_line": 11.953066426071649
+        },
+        "noise_location": {
+          "clean": {
+            "n": 1166,
+            "mae_km": 13.55984688811948
+          },
+          "40.0": {
+            "n": 278,
+            "mae_km": 14.215340336447046
+          },
+          "50.0": {
+            "n": 294,
+            "mae_km": 13.164091005909315
+          },
+          "30.0": {
+            "n": 299,
+            "mae_km": 15.335142336077038
+          },
+          "20.0": {
+            "n": 279,
+            "mae_km": 17.927834451736025
+          }
+        }
+      }
+    },
+    "rms_double": {
+      "forest": {
+        "event": {
+          "n": 3120,
+          "accuracy": 0.9990384615384615,
+          "macro_f1": 0.9987468647142558,
+          "recall": {
+            "external": 0.99375,
+            "healthy": 1.0,
+            "internal": 1.0
+          },
+          "confusion_matrix": [
+            [
+              477,
+              0,
+              3
+            ],
+            [
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              2400
+            ]
+          ],
+          "classes": [
+            "external",
+            "healthy",
+            "internal"
+          ],
+          "expected_calibration_error_10_bins": 0.0012521825460690326
+        },
+        "fault_type_oracle_internal": {
+          "n": 2400,
+          "accuracy": 0.9995833333333334,
+          "macro_f1": 0.9995833315248763,
+          "recall": {
+            "AB": 1.0,
+            "ABC": 1.0,
+            "ABG": 1.0,
+            "AG": 1.0,
+            "BC": 1.0,
+            "BCG": 0.9958333333333333,
+            "BG": 1.0,
+            "CA": 1.0,
+            "CAG": 1.0,
+            "CG": 1.0
+          },
+          "confusion_matrix": [
+            [
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              239,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240
+            ]
+          ],
+          "classes": [
+            "AB",
+            "ABC",
+            "ABG",
+            "AG",
+            "BC",
+            "BCG",
+            "BG",
+            "CA",
+            "CAG",
+            "CG"
+          ],
+          "expected_calibration_error_10_bins": 0.00041998810506302544
+        },
+        "pipeline": {
+          "total_records": 3120,
+          "event_acceptance_rate": 0.9990384615384615,
+          "correct_event_among_accepted": 0.9990375360923965,
+          "internal_event_recall_including_abstentions": 1.0,
+          "healthy_false_internal_rate": 0.0,
+          "correct_fault_type_fraction_all_internal": 0.9995833333333334,
+          "location_availability_on_internal": 1.0,
+          "false_in_line_location_count": 3,
+          "non_internal_records": 720,
+          "abstention_or_domain_rejection_count": 3,
+          "interval_target_coverage": 0.9,
+          "interval_empirical_test_coverage": 0.8954166666666666
+        },
+        "location_accepted_internal": {
+          "n": 2400,
+          "mae_km": 3.657477424126827,
+          "rmse_km": 5.294760448039118,
+          "p95_absolute_error_km": 10.656174936017933,
+          "mean_error_percent_line": 3.047897853439023
+        },
+        "noise_location": {
+          "clean": {
+            "n": 1200,
+            "mae_km": 2.9622601318287107
+          },
+          "40.0": {
+            "n": 290,
+            "mae_km": 3.1685511966740454
+          },
+          "50.0": {
+            "n": 302,
+            "mae_km": 3.184788218718197
+          },
+          "30.0": {
+            "n": 308,
+            "mae_km": 3.956170112034788
+          },
+          "20.0": {
+            "n": 300,
+            "mae_km": 7.080157920382832
+          }
+        }
+      }
+    },
+    "phasor_double": {
+      "forest": {
+        "event": {
+          "n": 3120,
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "recall": {
+            "external": 1.0,
+            "healthy": 1.0,
+            "internal": 1.0
+          },
+          "confusion_matrix": [
+            [
+              480,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              2400
+            ]
+          ],
+          "classes": [
+            "external",
+            "healthy",
+            "internal"
+          ],
+          "expected_calibration_error_10_bins": 1.4238477552330764e-05
+        },
+        "fault_type_oracle_internal": {
+          "n": 2400,
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "recall": {
+            "AB": 1.0,
+            "ABC": 1.0,
+            "ABG": 1.0,
+            "AG": 1.0,
+            "BC": 1.0,
+            "BCG": 1.0,
+            "BG": 1.0,
+            "CA": 1.0,
+            "CAG": 1.0,
+            "CG": 1.0
+          },
+          "confusion_matrix": [
+            [
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              240
+            ]
+          ],
+          "classes": [
+            "AB",
+            "ABC",
+            "ABG",
+            "AG",
+            "BC",
+            "BCG",
+            "BG",
+            "CA",
+            "CAG",
+            "CG"
+          ],
+          "expected_calibration_error_10_bins": 4.641835769203517e-06
+        },
+        "pipeline": {
+          "total_records": 3120,
+          "event_acceptance_rate": 1.0,
+          "correct_event_among_accepted": 1.0,
+          "internal_event_recall_including_abstentions": 1.0,
+          "healthy_false_internal_rate": 0.0,
+          "correct_fault_type_fraction_all_internal": 1.0,
+          "location_availability_on_internal": 0.91875,
+          "false_in_line_location_count": 0,
+          "non_internal_records": 720,
+          "abstention_or_domain_rejection_count": 0,
+          "interval_target_coverage": 0.9,
+          "interval_empirical_test_coverage": 0.9015873015873016
+        },
+        "location_accepted_internal": {
+          "n": 2205,
+          "mae_km": 1.377210161274139,
+          "rmse_km": 2.770141079110398,
+          "p95_absolute_error_km": 4.865376628400386,
+          "mean_error_percent_line": 1.1476751343951157
+        },
+        "noise_location": {
+          "clean": {
+            "n": 1200,
+            "mae_km": 0.6447153982454754
+          },
+          "40.0": {
+            "n": 289,
+            "mae_km": 1.1603789782162242
+          },
+          "50.0": {
+            "n": 302,
+            "mae_km": 0.656268105559105
+          },
+          "30.0": {
+            "n": 292,
+            "mae_km": 2.863064263172645
+          },
+          "20.0": {
+            "n": 122,
+            "mae_km": 7.32403828102586
+          }
+        }
+      }
+    }
+  },
+  "physics_baselines_oracle_internal": {
+    "single_ended_reactance_oracle_type": {
+      "n": 2400,
+      "mae_km": 3.4218979188322254,
+      "rmse_km": 5.974606068048911,
+      "p95_absolute_error_km": 13.642671600706295,
+      "mean_error_percent_line": 2.8515815990268543
+    },
+    "double_ended_ungated": {
+      "n": 2400,
+      "mae_km": 2.0045592854894276,
+      "rmse_km": 4.282593875768735,
+      "p95_absolute_error_km": 9.609337821208092,
+      "mean_error_percent_line": 1.6704660712411896
+    }
+  },
+  "training_elapsed_seconds": 27.1276715999702,
+  "limitations": [
+    "Synthetic fundamental-frequency benchmark only; no field or EMT validation claimed.",
+    "Calibration intervals target 90%; empirical held-out coverage is reported, not guaranteed under shift.",
+    "Only the configured line, bases, source/load ranges, and input conventions are supported.",
+    "Noise levels are complex-phasor-domain SNR, not raw waveform SNR.",
+    "Inference latency excludes acquisition of any raw measurement window."
+  ]
+}

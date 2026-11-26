@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gridfault-lab"
+version = "0.1.0"
+description = "Measurement-aware transmission-line fault diagnosis research prototype"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.1,<3", "scipy>=1.14,<2", "scikit-learn>=1.6,<2"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+gridfault = "gridfault.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

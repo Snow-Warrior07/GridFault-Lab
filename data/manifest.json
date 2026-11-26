@@ -1,0 +1,170 @@
+{
+  "seed": 20261126,
+  "groups": 800,
+  "records": 20800,
+  "physical_scenarios": 10400,
+  "partition_groups": {
+    "train": 480,
+    "validation": 120,
+    "calibration": 80,
+    "test": 120
+  },
+  "partition_records": {
+    "train": 12480,
+    "validation": 3120,
+    "calibration": 2080,
+    "test": 3120
+  },
+  "event_counts": {
+    "healthy": 1600,
+    "internal": 16000,
+    "external": 3200
+  },
+  "fault_types": [
+    "AG",
+    "BG",
+    "CG",
+    "AB",
+    "BC",
+    "CA",
+    "ABG",
+    "BCG",
+    "CAG",
+    "ABC"
+  ],
+  "variants": [
+    "clean",
+    "20/30/40/50 dB complex-phasor noise"
+  ],
+  "sha256": "080f6f152c1cd1b4fc2d8bf36507d56f831211850a7e38c1867f16b1322e1962",
+  "benchmark": {
+    "id": "ieee9-adapted-7-8-v1",
+    "line_id": "L7-8",
+    "bus_s": 7,
+    "bus_r": 8,
+    "line_length_km": 120.0,
+    "base_mva": 100.0,
+    "base_kv": 345.0,
+    "frequency_hz": 50,
+    "z_base_ohm": 1190.25,
+    "nominal_z_re": [
+      [
+        0.014166666666666678,
+        0.0056666666666666515,
+        0.005666666666666669
+      ],
+      [
+        0.005666666666666675,
+        0.014166666666666645,
+        0.005666666666666676
+      ],
+      [
+        0.005666666666666674,
+        0.0056666666666666385,
+        0.01416666666666667
+      ]
+    ],
+    "nominal_z_im": [
+      [
+        0.12,
+        0.04799999999999999,
+        0.04799999999999999
+      ],
+      [
+        0.04800000000000001,
+        0.11999999999999997,
+        0.04799999999999998
+      ],
+      [
+        0.04800000000000001,
+        0.04799999999999999,
+        0.11999999999999997
+      ]
+    ],
+    "source": "https://github.com/MATPOWER/matpower/blob/master/data/case9.m",
+    "assumptions": [
+      "Linear, fundamental-frequency, three-phase nodal circuit; not EMT or field data.",
+      "Loads are constant admittances; generators are grounded Norton equivalents.",
+      "Negative-sequence impedance equals positive; zero-sequence impedance is assumed 3x positive.",
+      "The monitored line is a series-only model; its case9 charging is intentionally omitted.",
+      "Other branches use pi shunts; no detailed transformer winding/grounding model.",
+      "120 km is an assumed length; it does not follow from MATPOWER data.",
+      "Only the registered 7-8 circuit, bases, and stated operating ranges are supported."
+    ]
+  },
+  "held_out_distance_bands_pu": [
+    [
+      0.2,
+      0.25
+    ],
+    [
+      0.7,
+      0.75
+    ]
+  ],
+  "splitting": "Operating-condition groups assigned before events, windows, or noisy copies are generated.",
+  "features": [
+    "s_va",
+    "s_vb",
+    "s_vc",
+    "s_ia",
+    "s_ib",
+    "s_ic",
+    "r_va",
+    "r_vb",
+    "r_vc",
+    "r_ia",
+    "r_ib",
+    "r_ic",
+    "s_va_re",
+    "s_va_im",
+    "s_vb_re",
+    "s_vb_im",
+    "s_vc_re",
+    "s_vc_im",
+    "s_ia_re",
+    "s_ia_im",
+    "s_ib_re",
+    "s_ib_im",
+    "s_ic_re",
+    "s_ic_im",
+    "r_va_re",
+    "r_va_im",
+    "r_vb_re",
+    "r_vb_im",
+    "r_vc_re",
+    "r_vc_im",
+    "r_ia_re",
+    "r_ia_im",
+    "r_ib_re",
+    "r_ib_im",
+    "r_ic_re",
+    "r_ic_im",
+    "sv_seq0",
+    "sv_seq1",
+    "sv_seq2",
+    "si_seq0",
+    "si_seq1",
+    "si_seq2",
+    "rv_seq0",
+    "rv_seq1",
+    "rv_seq2",
+    "ri_seq0",
+    "ri_seq1",
+    "ri_seq2",
+    "diff_a",
+    "diff_b",
+    "diff_c",
+    "diff_ratio"
+  ],
+  "not_features": [
+    "event",
+    "fault_type",
+    "actual_fault_type",
+    "location_pu",
+    "resistance_ohm",
+    "snr_db",
+    "conditions",
+    "scenario_id"
+  ]
+}

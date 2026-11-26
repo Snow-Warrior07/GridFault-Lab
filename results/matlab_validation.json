@@ -1,0 +1,7 @@
+{
+  "cases": 50,
+  "max_location_error_pu": 2.2204460492503131E-16,
+  "max_electrical_residual": 1.7631747975862017E-15,
+  "matlab_version": "24.2.0.2863752 (R2024b) Update 5",
+  "scope": "Independent algebra check only; not EMT or field validation"
+}

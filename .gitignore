@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+build/
+dist/
+.env*
+!.env.example
+*.joblib
+*.pkl
+tmp/
+screenshots/
+matlab/preferences/
+*.slxc
+slprj/
+

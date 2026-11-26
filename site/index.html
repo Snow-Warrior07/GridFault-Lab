@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A reproducible, measurement-aware transmission-line fault diagnosis research prototype. Explore actual trained models and held-out evaluation.">
+  <meta name="theme-color" content="#0b2228"><title>GridFault Lab — Transmission-line diagnosis</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="#diagnose" aria-label="GridFault Lab home"><span class="brand-mark">ϟ</span>GridFault<span class="brand-light">Lab</span></a><nav aria-label="Main navigation"><a href="#diagnose" class="active" data-tab="diagnose">Diagnosis</a><a href="#evaluation" data-tab="evaluation">Evaluation</a><a href="#method" data-tab="method">The project</a></nav><a class="source-link" href="https://github.com/Snow-Warrior07/GridFault-Lab" target="_blank" rel="noopener">Source code <span aria-hidden="true">↗</span></a></header>
+  <main>
+    <section class="view" id="view-diagnose">
+      <div class="intro"><div><div class="eyebrow"><span class="status-dot"></span> POWER SYSTEMS × MACHINE LEARNING</div><h1>Measurements in.<br><span>Understanding out.</span></h1><p>A research workbench for fault detection, classification, and location.<br class="desktop"> The available measurements determine what the model can tell you.</p></div><div class="benchmark-card"><span class="micro">ACTIVE BENCHMARK</span><strong>IEEE 9-bus · adapted</strong><div class="mini-line"><span>BUS 7</span><i></i><span>BUS 8</span></div><div class="benchmark-bottom"><b>120 <small>km</small></b><span>345 kV · 50 Hz<br>Synthetic phasor data</span></div></div></div>
+      <div class="workbench">
+        <section class="panel measurement-panel"><div class="panel-heading"><div><span class="step-index">01</span><h2>Provide measurements</h2></div><span class="chip">Per-unit RMS</span></div>
+          <div class="example-bar"><label for="example-select">Start with a held-out example</label><select id="example-select"><option>Loading examples…</option></select></div>
+          <div class="input-controls"><label>Representation<select id="representation"><option value="phasor">RMS magnitude + phase</option><option value="rms">RMS magnitudes only</option></select></label><label>Available terminals<select id="terminal"><option value="both">Both buses</option><option value="sending">Bus 7 only</option><option value="receiving">Bus 8 only</option></select></label></div>
+          <div class="table-scroll"><table class="measurement-table"><thead><tr><th>Channel</th><th colspan="2">BUS 7 · SENDING</th><th colspan="2" id="receiving-heading">BUS 8 · RECEIVING</th></tr><tr class="subhead"><th></th><th>RMS (pu)</th><th class="angle-col">Phase (°)</th><th>RMS (pu)</th><th class="angle-col">Phase (°)</th></tr></thead><tbody id="measurement-rows"></tbody></table></div>
+          <label class="sync-control"><input type="checkbox" id="synchronized" checked><span>Terminal measurements share a synchronized phase reference<small>Required for the two-ended phasor locator. Unchecked records use an RMS fallback.</small></span></label>
+          <div class="file-actions"><label class="button secondary" for="upload">↑ Import JSON / CSV<input type="file" id="upload" accept=".json,.csv" hidden></label><button class="text-button" id="download-input">Download input ↓</button><button class="text-button" id="download-csv">CSV template ↓</button></div>
+          <div class="tasks"><div class="task-title"><span class="step-index">02</span><h2>Select information</h2></div><div class="task-options"><label><input type="checkbox" name="task" value="event" checked> Detect event</label><label><input type="checkbox" name="task" value="type" checked> Fault type</label><label><input type="checkbox" name="task" value="location" checked> Fault location</label></div><p id="capability-note" class="muted small">Checking available measurements…</p></div>
+          <details class="advanced"><summary>Research controls</summary><div class="input-controls"><label>Measurement profile<select id="profile"><option value="auto">Automatic · best available</option><option value="rms_single">Bus 7 · six RMS values</option><option value="rms_receiving">Bus 8 · six RMS values</option><option value="rms_double">Both buses · twelve RMS values</option><option value="phasor_double">Both buses · synchronized phasors</option></select></label><label>Model family<select id="family"><option value="forest">Random Forest + physics</option><option value="anfis">ANFIS reference · bus 7 RMS</option></select></label></div></details>
+          <div id="input-error" role="alert" hidden></div><button class="button primary" id="analyze"><span>Analyze measurements</span><span aria-hidden="true">→</span></button>
+          <p class="privacy-note">Runs in your browser. Uploaded measurements stay on your device.</p>
+        </section>
+        <aside class="results-column"><section class="panel results-panel" aria-live="polite" aria-atomic="true"><div class="panel-heading"><div><span class="step-index">03</span><h2>Diagnosis</h2></div><span id="result-status" class="chip neutral">Ready</span></div><div id="result-body"><div class="result-empty"><div class="empty-orbit">ϟ</div><h3>Let the measurements speak.</h3><p>Load an example or enter values,<br>then run the trained model.</p></div></div></section>
+          <section class="panel signature-panel"><div class="signature-heading"><h2>Voltage signature</h2><span class="micro">PHASE RMS · PU</span></div><div id="voltage-chart"></div><div class="chart-legend"><span><i class="swatch sending"></i>Bus 7</span><span><i class="swatch receiving"></i>Bus 8</span></div></section>
+          <div class="scope-note"><span>↳</span><p><strong>A defined research domain.</strong> This version supports the registered 7–8 circuit and documented simulation ranges. RMS values, phasors, and missing channels are handled as different input profiles.</p></div>
+        </aside>
+      </div>
+    </section>
+    <section class="view" id="view-evaluation" hidden><div class="page-intro"><div class="eyebrow">MEASURED PERFORMANCE</div><h1>Evidence before confidence.</h1><p>Actual results on held-out synthetic scenarios. Abstentions and false locations are reported alongside accuracy.</p></div><div id="evaluation-content"><p>Loading evaluation…</p></div></section>
+    <section class="view" id="view-method" hidden><div class="page-intro"><div class="eyebrow">FROM CIRCUIT TO PREDICTION</div><h1>Inside the project.</h1><p>A transparent first version, with a reproducible path from physical assumptions to managed prediction errors.</p></div><div id="method-content"></div></section>
+  </main>
+  <footer><a class="brand footer-brand" href="#diagnose">GridFault<span class="brand-light">Lab</span></a><span>BTP research prototype · v0.1.0</span><a href="https://github.com/Snow-Warrior07/GridFault-Lab/blob/main/docs/PROJECT_GUIDE.md" target="_blank" rel="noopener">Full project guide ↗</a></footer>
+  <script type="module" src="app.mjs"></script>
+</body></html>
